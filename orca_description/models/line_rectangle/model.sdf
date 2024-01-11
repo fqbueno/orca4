@@ -9,7 +9,7 @@
       <pose>0 0 0 0 0 0</pose>
       <geometry>
         <box>
-          <size>80 2 .1</size>
+          <size>80 1.5 .1</size>
         </box>
       </geometry>
       <material>
@@ -24,7 +24,7 @@
       <pose>40 -40 0 0 0 0</pose>
       <geometry>
         <box>
-          <size>2 82 .1</size>
+          <size>1.5 81.5 .1</size>
         </box>
       </geometry>
       <material>
@@ -39,7 +39,7 @@
       <pose>-40 -40 0 0 0 0</pose>
       <geometry>
         <box>
-          <size>2 82 .1</size>
+          <size>1.5 81.5 .1</size>
         </box>
       </geometry>
       <material>
@@ -54,7 +54,7 @@
       <pose>0 -80 0 0 0 0</pose>
       <geometry>
         <box>
-          <size>80 2 .1</size>
+          <size>80 1.5 .1</size>
         </box>
       </geometry>
       <material>
