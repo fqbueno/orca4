@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<sdf version="1.6">
+  <model name="line_rectangle">
+    <static>true</static>
+    <link name="rectangle_link">
+
+    <visual name="line_1">
+      <cast_shadows>false</cast_shadows>
+      <pose>0 0 0 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>80 2 .1</size>
+        </box>
+      </geometry>
+      <material>
+        <ambient>1 0 0 1</ambient>
+        <diffuse>1 0 0 1</diffuse>
+        <specular>0.1 0.1 0.1 1</specular>
+      </material>
+    </visual>
+
+    <visual name="line_2">
+      <cast_shadows>false</cast_shadows>
+      <pose>40 -40 0 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>2 82 .1</size>
+        </box>
+      </geometry>
+      <material>
+        <ambient>1 0 0 1</ambient>
+        <diffuse>1 0 0 1</diffuse>
+        <specular>0.1 0.1 0.1 1</specular>
+      </material>
+    </visual>
+
+    <visual name="line_3">
+      <cast_shadows>false</cast_shadows>
+      <pose>-40 -40 0 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>2 82 .1</size>
+        </box>
+      </geometry>
+      <material>
+        <ambient>1 0 0 1</ambient>
+        <diffuse>1 0 0 1</diffuse>
+        <specular>0.1 0.1 0.1 1</specular>
+      </material>
+    </visual>
+
+    <visual name="line_4">
+      <cast_shadows>false</cast_shadows>
+      <pose>0 -80 0 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>80 2 .1</size>
+        </box>
+      </geometry>
+      <material>
+        <ambient>1 0 0 1</ambient>
+        <diffuse>1 0 0 1</diffuse>
+        <specular>0.1 0.1 0.1 1</specular>
+      </material>
+    </visual>
+    
+
+
+    </link>
+
+  </model>
+</sdf>
