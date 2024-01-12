@@ -55,7 +55,7 @@ Populate the workspace:
 ~~~
 mkdir -p ~/colcon_ws/src
 cd colcon_ws/src
-git clone https://github.com/clydemcqueen/orca4
+git clone https://github.com/fqbueno/orca4.git
 vcs import < orca4/workspace.repos
 ~~~
 
