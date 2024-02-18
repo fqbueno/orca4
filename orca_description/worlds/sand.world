@@ -40,7 +40,7 @@
         </density_change>
       </graded_buoyancy>
       <!-- Enable by model name -->
-      <enable>orca4</enable>
+      <enable>orca4_heavy</enable>
     </plugin>
 
     <include>
@@ -63,7 +63,7 @@
     </include>
 
     <include>
-      <uri>model://orca4</uri>
+      <uri>model://orca4_heavy</uri>
       <pose>0 0 -0.2 0 0 0</pose>
     </include>
 
