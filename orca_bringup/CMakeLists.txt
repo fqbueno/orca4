@@ -16,6 +16,7 @@ install(
   scripts/dump_rosout.py
   scripts/mission_runner.py
   scripts/mission_run.py
+  scripts/mission_run_1.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

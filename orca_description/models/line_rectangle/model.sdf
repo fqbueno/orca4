@@ -6,10 +6,10 @@
 
     <visual name="line_1">
       <cast_shadows>false</cast_shadows>
-      <pose>0 0 0 0 0 0</pose>
+      <pose>0 0 -5 0 0 0</pose>
       <geometry>
         <box>
-          <size>80 1.5 .1</size>
+          <size>10 0.05 .001</size>
         </box>
       </geometry>
       <material>
@@ -21,10 +21,10 @@
 
     <visual name="line_2">
       <cast_shadows>false</cast_shadows>
-      <pose>40 -40 0 0 0 0</pose>
+      <pose>5 -2.5 -5 0 0 0</pose>
       <geometry>
         <box>
-          <size>1.5 81.5 .1</size>
+          <size>0.05 5.05 .001</size>
         </box>
       </geometry>
       <material>
@@ -36,10 +36,10 @@
 
     <visual name="line_3">
       <cast_shadows>false</cast_shadows>
-      <pose>-40 -40 0 0 0 0</pose>
+      <pose>-5 -2.5 -5 0 0 0</pose>
       <geometry>
         <box>
-          <size>1.5 81.5 .1</size>
+          <size>0.05 5.05 .001</size>
         </box>
       </geometry>
       <material>
@@ -51,10 +51,10 @@
 
     <visual name="line_4">
       <cast_shadows>false</cast_shadows>
-      <pose>0 -80 0 0 0 0</pose>
+      <pose>0 -5 -5 0 0 0</pose>
       <geometry>
         <box>
-          <size>80 1.5 .1</size>
+          <size>10 0.05 .001</size>
         </box>
       </geometry>
       <material>

@@ -17,22 +17,27 @@ from std_srvs.srv import Empty
 import numpy as np
 import cv2
 import cv_bridge
+import queue
+import time
 
 bridge = cv_bridge.CvBridge()
 
 ## User-defined parameters: (Update these values to your liking)
 # Minimum size for a contour to be considered anything
-MIN_AREA = 500 
+MIN_AREA = 300 
 
 # Minimum size for a contour to be considered part of the track
-MIN_AREA_TRACK = 4000
+MIN_AREA_TRACK = 2000
 
 # Robot's speed when following the line
-LINEAR_SPEED = 0.1
+LINEAR_SPEED = 0.08
 
 # Proportional constant to be applied on speed when turning 
 # (Multiplied by the error value)
-KP = 1.5/2500
+KP = 1.10
+KI = 2.00
+KD = 0.60
+KS = 10
 
 # If the line is completely lost, the error value shall be compensated by:
 LOSS_FACTOR = 1.2
@@ -62,7 +67,13 @@ def crop_size(height, width):
     return (1*height//3, height, width//4, 3*width//4)
 
 image_input = 0
+error_int = 0
+error_dif = 0
+error_prev = 0
 error = 0
+
+err_history = queue.Queue(KS)
+t_prev = 0
 just_seen_line = False
 just_seen_right_mark = False
 should_move = False
@@ -169,7 +180,12 @@ def timer_callback():
     so it can follow the contour
     """
 
+    global error_dif
     global error
+    global error_int
+    global error_prev
+    global err_history
+    global t_prev
     global image_input
     global just_seen_line
     global just_seen_right_mark
@@ -210,7 +226,8 @@ def timer_callback():
 
         # error:= The difference between the center of the image
         # and the center of the line
-        error = x - width//2
+        error = (width//2 - x + 10)/175
+        tstamp = time.time()
 
         message.linear.x = LINEAR_SPEED
         just_seen_line = True
@@ -247,8 +264,20 @@ def timer_callback():
 
     
     # Determine the speed to turn and get the line in the center of the camera.
-    message.angular.z = float(error) * -KP
-    print("Error: {} | Angular Z: {}, ".format(error, message.angular.z))
+    if just_seen_line:
+        dt = tstamp - t_prev
+        if dt > 0.0:
+            err_history.put(error)
+            error_int += error
+            if err_history.full():
+                error_int -= err_history.get()
+            error_dif = error - error_prev
+            u = (KP * error) + (KI * error_int * dt) + (KD * error_dif / dt)
+            error_prev = error
+            t_prev = tstamp
+            message.angular.z = u
+    # print('angular:', message.angular.z)
+
     
 
 
@@ -257,7 +286,7 @@ def timer_callback():
     cv2.rectangle(output, (crop_w_start, crop_h_start), (crop_w_stop, crop_h_stop), (0,0,255), 2)
 
     # Uncomment to show the binary picture
-    cv2.imshow("mask", mask)
+    # cv2.imshow("mask", mask)
 
     # Show the output image to the user
     cv2.imshow("output", output)
@@ -400,10 +429,11 @@ def main():
             print('>>> Executing mission <<<')
             send_goal(node, follow_waypoints, delay_loop)
             timer = node.create_timer(TIMER_PERIOD, timer_callback)
+            start_time = node.get_clock().now()
 
             start_service = node.create_service(Empty, 'start_follower', start_follower_callback)
             stop_service = node.create_service(Empty, 'stop_follower', stop_follower_callback)
-            print("testing sa main")
+            # print("testing sa main")
             rclpy.spin(node)
 
             # print('>>> Setting mode to ROV <<<')

@@ -20,7 +20,7 @@
           <izz>0.2692441666666667</izz>
         </inertia>
       </inertial>
-      
+
       <visual name="base_link_visual">
         <geometry>
           <mesh>
@@ -29,7 +29,7 @@
           </mesh>
         </geometry>
       </visual>
-      
+
       <!-- Collision volume * fluid_density == displaced mass, used by BuoyancyPlugin -->
       <collision name="base_link_collision">
         <pose>0 0 0.06 0 0 0</pose>
@@ -430,7 +430,7 @@
         </geometry>
       </visual>
       <sensor name="left_camera" type="camera">
-        <pose>0 0 -0.08750000000000001 0 1.5707963267948966 0</pose>
+        <pose>0 0 -0.08750000000000001 0 0.7853981633974483 0</pose>
         <camera>
           <horizontal_fov>1.4</horizontal_fov>
           <image>
@@ -480,7 +480,7 @@
         </geometry>
       </visual>
       <sensor name="right_camera" type="camera">
-        <pose>0 0 -0.08750000000000001 0 1.5707963267948966 0</pose>
+        <pose>0 0 -0.08750000000000001 0 0.7853981633974483 0</pose>
         <camera>
           <horizontal_fov>1.4</horizontal_fov>
           <image>
@@ -527,4 +527,5 @@
     </plugin>
 
   </model>
+</sdf>
 </sdf>
