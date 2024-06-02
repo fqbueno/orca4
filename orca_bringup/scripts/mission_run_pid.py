@@ -12,6 +12,7 @@ from rclpy.action import ActionClient
 from std_msgs.msg import Header
 from sensor_msgs.msg import Image
 from geometry_msgs.msg import Twist
+from geometry_msgs.msg import TransformStamped
 from std_srvs.srv import Empty
 
 import numpy as np
@@ -19,6 +20,8 @@ import cv2
 import cv_bridge
 import queue
 import time
+import matplotlib.pyplot as plt
+import math
 
 bridge = cv_bridge.CvBridge()
 
@@ -37,6 +40,9 @@ LINEAR_SPEED = 0.08
 KP = 1.10
 KI = 2.00
 KD = 0.60
+# KP = 1.5
+# KI = 1.5
+# KD = 1.5
 KS = 10
 
 # If the line is completely lost, the error value shall be compensated by:
@@ -80,6 +86,13 @@ should_move = False
 right_mark_count = 0
 finalization_countdown = None
 
+# pose_x = []
+# pose_y = []
+# pose_z = []
+error_log = []
+time_log = []
+control_log = []
+
 def start_follower_callback(request, response):
     """
     Start the robot.
@@ -102,6 +115,17 @@ def stop_follower_callback(request, response):
     should_move = False
     finalization_countdown = None
     return response
+
+# def pose_callback(msg):
+#     global should_move
+#     global pose_x
+#     global pose_y
+#     global pose_z
+#     if should_move:
+#         pose_x.append(msg.pose.position.x)
+#         pose_y.append(msg.pose.position.y)
+#         pose_z.append(msg.pose.position.z)
+        # print(msg.pose.position.x)
 
 def image_callback(msg):
     """
@@ -192,6 +216,14 @@ def timer_callback():
     global should_move
     global right_mark_count
     global finalization_countdown
+    global error_log
+    global time_log
+    global control_log
+    # global pose_x
+    # global pose_y
+    # global pose_z
+    global node
+
 
     # Wait for the first image to be received
     if type(image_input) != np.ndarray:
@@ -264,11 +296,13 @@ def timer_callback():
 
     
     # Determine the speed to turn and get the line in the center of the camera.
-    if just_seen_line:
+    if just_seen_line and should_move:
         dt = tstamp - t_prev
         if dt > 0.0:
             err_history.put(error)
             error_int += error
+            time_log.append(tstamp)
+            error_log.append(error)
             if err_history.full():
                 error_int -= err_history.get()
             error_dif = error - error_prev
@@ -276,6 +310,7 @@ def timer_callback():
             error_prev = error
             t_prev = tstamp
             message.angular.z = u
+            control_log.append(u)
     # print('angular:', message.angular.z)
 
     
@@ -302,6 +337,40 @@ def timer_callback():
 
         elif finalization_countdown == 0:
             should_move = False
+
+    if not should_move and error_log and time_log:
+        f1 = plt.figure(1)
+        plt.plot(time_log, error_log)
+        plt.xlabel("Time")
+        plt.xlim(min(time_log), max(time_log))
+        plt.ylabel("Error")
+        plt.yticks(np.arange(math.floor(min(error_log)), math.ceil(max(error_log)) + 1, 0.5))
+        plt.title("Error over Time")
+    
+    # if not should_move and control_log and time_log:
+    #     f2 = plt.figure(2)
+    #     plt.plot(time_log, control_log)
+    #     plt.xlabel("Time")
+    #     plt.xlim(min(time_log), max(time_log))
+    #     plt.ylabel("Control Signal - Angular Velocity")
+    #     plt.title("Control Signal Over Time")
+            
+    # if not should_move and pose_x:
+    #     f2 = plt.figure(2)
+    #     # plt.plot(pose_x, pose_y)
+    #     # plt.xlabel('X')
+    #     # plt.ylabel("Y")
+    #     # plt.title('Robot Path')
+    #     ax = plt.axes(projection='3d')
+    #     ax.plot3D(pose_x, pose_y, pose_z, 'green')
+    #     ax.set_xlabel('X')
+    #     ax.set_ylabel('Y')
+    #     ax.set_zlabel('pose_z')
+    #     ax.set_title('Robot Path')
+            
+    if not should_move and control_log and error_log:
+        plt.show()
+        rclpy.shutdown()
 
 
     # Publish the message to 'cmd_vel'
@@ -340,6 +409,7 @@ dive.poses.append(make_pose(x=0.0, y=0.0, z=-8.0))
 # Big loop, will eventually result in a loop closure
 delay_loop = FollowWaypoints.Goal()
 delay_loop.poses.append(make_pose(x=0.0, y=0.0, z=-3.0))
+# delay_loop.poses.append(make_pose(x=0.0, y=0.0, z=-8.0))
 # for _ in range(2):
 #     delay_loop.poses.append(make_pose(x=20.0, y=-13.0, z=-7.0))
 #     delay_loop.poses.append(make_pose(x=10.0, y=-23.0, z=-7.0))
@@ -412,7 +482,7 @@ def main():
 
     rclpy.init()
     global publisher
-
+    
     try:
         node = rclpy.create_node("mission_runner")
 
@@ -423,6 +493,7 @@ def main():
         subscription = node.create_subscription(Image, '/stereo_left',
                                             image_callback,
                                             rclpy.qos.qos_profile_sensor_data)
+        # pose_subscription = node.create_subscription(PoseStamped, '/mavros/local_position/pose', pose_callback, rclpy.qos.qos_profile_sensor_data)
 
         print('>>> Setting mode to AUV <<<')
         if send_goal(node, set_target_mode, go_auv) == SendGoalResult.SUCCESS:
@@ -438,8 +509,6 @@ def main():
 
             # print('>>> Setting mode to ROV <<<')
             # send_goal(node, set_target_mode, go_rov)
-
-            
 
             print('>>> Mission complete <<<')
         else:
