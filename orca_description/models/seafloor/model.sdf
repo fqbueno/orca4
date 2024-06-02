@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<sdf version="1.6">
+  <model name="seafloor">
+    <static>true</static>
+    <link name="seafloor_link">
+    <visual name="surface">
+      <cast_shadows>false</cast_shadows>
+      <pose>0 0 0 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>250 250 .1</size>
+        </box>
+      </geometry>
+      <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>0.1 0.1 0.1 0.1</specular>
+        <pbr>
+          <metal>
+            <albedo_map>model://seafloor/materials/soil_sand_0045_01.jpg</albedo_map>
+          </metal>
+        </pbr>
+        <!-- <script>
+          <uri>model://seabed/materials/scripts/</uri>
+          <uri>model://seabed/materials/textures/</uri>
+          <name>UUVSimulator/StaticWater</name>
+        </script> -->
+      </material>
+    </visual>
+    </link>
+  </model>
+</sdf>

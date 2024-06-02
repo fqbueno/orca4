@@ -15,6 +15,8 @@ install(
   PROGRAMS
   scripts/dump_rosout.py
   scripts/mission_runner.py
+  scripts/mission_run_pid.py
+  scripts/mission_run_fuzzypid.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
