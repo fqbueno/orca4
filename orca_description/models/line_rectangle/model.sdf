@@ -6,9 +6,11 @@
 
     <visual name="line_1">
       <cast_shadows>false</cast_shadows>
+      <!-- <pose>0 0 -10 0 0 0</pose> -->
       <pose>0 0 -5 0 0 0</pose>
       <geometry>
         <box>
+          <!-- <size>10 0.05 .2</size> -->
           <size>10 0.05 .001</size>
         </box>
       </geometry>
@@ -21,9 +23,11 @@
 
     <visual name="line_2">
       <cast_shadows>false</cast_shadows>
+      <!-- <pose>5 -2.5 -10 0 0 0</pose> -->
       <pose>5 -2.5 -5 0 0 0</pose>
       <geometry>
         <box>
+          <!-- <size>0.05 5.05 .2</size> -->
           <size>0.05 5.05 .001</size>
         </box>
       </geometry>
@@ -36,9 +40,11 @@
 
     <visual name="line_3">
       <cast_shadows>false</cast_shadows>
+      <!-- <pose>-5 -2.5 -10 0 0 0</pose> -->
       <pose>-5 -2.5 -5 0 0 0</pose>
       <geometry>
         <box>
+          <!-- <size>0.05 5.05 .2</size> -->
           <size>0.05 5.05 .001</size>
         </box>
       </geometry>
@@ -51,9 +57,11 @@
 
     <visual name="line_4">
       <cast_shadows>false</cast_shadows>
+      <!-- <pose>0 -5 -10 0 0 0</pose> -->
       <pose>0 -5 -5 0 0 0</pose>
       <geometry>
         <box>
+          <!-- <size>10 0.05 .2</size> -->
           <size>10 0.05 .001</size>
         </box>
       </geometry>
