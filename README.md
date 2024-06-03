@@ -1,3 +1,13 @@
+
+## Introduction
+This repository was cloned from Clyde Mcqueen's Orca4. Changes have been made in multiple directories/packages by Felix Q. Bueno IV (fqbueno@up.edu.ph) and James Adrian V. Perez (jvperez2@up.edu.ph) for their research entitled **Integration of ROS2 and Gazebo for Underwater ROV Control** at the Computer Vision and Machine Intelligence Lab (CVMIL) at the University of the Philippines - Diliman. Their research has modified the Gazebo simulation environment as well as added another AUV Mission which is the Line-following mission. The Line-following mission was implemented by using a PID Controller and a Fuzzy PID Controller.
+
+Specifically, files have been added and changes have been made to the following packages:
+* [`orca_bringup` Launch files](orca_bringup)
+* [`orca_description` SDF files](orca_description)
+* [`gazebo_scripts` movement through gazebo only](gazebo_scripts)
+
+
 # Orca4 ![ROS2 CI](https://github.com/clydemcqueen/orca4/actions/workflows/build_test.yml/badge.svg?branch=main)
 
 Orca4 is a set of [ROS2](http://www.ros.org/) packages that provide basic AUV (Autonomous Underwater
@@ -94,7 +104,7 @@ This will bring up all of the components, including the Gazebo UI.
 The surface of the water is at Z=0 and the sub will be sitting at the surface.
 The world contains a sandy seafloor 10 meters below the surface.
 
-![GAZEBO GUI](images/gazebo.png)
+![GAZEBO GUI](images/environment.PNG)
 
 You should see ArduSub establish a connection to the ardupilot_gazebo plugin:
 ~~~
@@ -107,8 +117,6 @@ You should see ArduSub establish a connection to the ardupilot_gazebo plugin:
 [ardusub-2] 	velocity
 ~~~
 
-At this point SLAM is not running because the seafloor is too far away,
-but the sub can still move using dead-reckoning.
 The [base_controller](orca_base/src/base_controller.cpp) node will send default camera poses to ArduSub
 to warm up the EKF and the [manager](orca_base/src/manager.cpp) node will request attitude information at 20Hz.
 Initialization completes when there is a good pose from the EKF:
@@ -120,35 +128,31 @@ Initialization completes when there is a good pose from the EKF:
 [base_controller-10] [INFO] [base_controller/UnderwaterMotion]: initialize odometry to {{-2.52304e-05, -3.28182e-05, -0.228547}, {0, 0, -5.00936e-05}}
 ~~~
 
-Execute a mission in a second terminal:
+Execute a mission in a second terminal (either using regular PID Controller or Fuzzy PID Controller.
+For regular PID Controller: 
 ~~~
 source src/orca4/setup.bash
-ros2 run orca_bringup mission_runner.py
-~~~ 
-
-![RVIZ2_GUI](images/rviz2.png)
-
-The default mission will dive to -7m and move in a large rectangle.
-At -6m the cameras will pick up a view of the seafloor at and ORB_SLAM2 will start:
-~~~
-[orb_slam2_ros_stereo-13] New map created with 571 points
-[base_controller-10] [INFO] [base_controller/change_state]: map created, state => RUN_LOCALIZED
+ros2 run orca_bringup mission_run_pid.py
 ~~~
 
-
-You should notice a loop closure sometime during the 2nd run around the rectangle. The adjustment is very small.
-
+For Fuzzy PID Controller: 
 ~~~
-[orb_slam2_ros_stereo-13] Loop detected!
-[orb_slam2_ros_stereo-13] Local Mapping STOP
-[orb_slam2_ros_stereo-13] Local Mapping RELEASE
-[orb_slam2_ros_stereo-13] Starting Global Bundle Adjustment
-[orb_slam2_ros_stereo-13] Global Bundle Adjustment finished
-[orb_slam2_ros_stereo-13] Updating map ...
-[orb_slam2_ros_stereo-13] Local Mapping STOP
-[orb_slam2_ros_stereo-13] Local Mapping RELEASE
-[orb_slam2_ros_stereo-13] Map updated!
+source src/orca4/setup.bash
+ros2 run orca_bringup mission_run_fuzzypid.py
 ~~~
+
+In the two missions, the robot will first dive to -3m. After this, start the follower callback in another terminal:
+~~~
+ros2 service call /start_follower std_srvs/srv/Empty
+~~~
+
+![Line-following](images/line-following.PNG)
+
+The robot will now follow the rectangular line in the environment. You can stop the Line-following by executing:
+~~~
+ros2 service call /stop_follower std_srvs/srv/Empty
+~~~
+
 
 ## Packages
 
