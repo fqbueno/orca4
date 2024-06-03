@@ -16,3 +16,8 @@ The script must be run manually when the model is changed.
 An URDF file is not provided. In practice this means 2 things:
 1. static transforms are published by instances `tf2_ros/static_transform_publisher`
 2. Rviz2 will only show transforms (Rviz2 can't read SDF)
+
+
+# Changes made to this package by fqbueno and jvperez
+The Gazebo underwater simulation environment was modified such that a sea surface [sea_surface](models/sea_surface/model.sdf) and 
+a rectangular line to be used in the line-following mission was added [line_rectangle](models/line_rectangle/model.sdf).
