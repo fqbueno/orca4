@@ -1,3 +1,5 @@
+Added by fqbueno and jvperez:
+
 # Control using Gazebo only
 
 In a terminal run:
