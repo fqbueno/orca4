@@ -75,3 +75,8 @@ You can use MAVProxy to drive the sub around the seafloor and build a map.
 The simulation uses Gazebo camera sensors to generate uncompressed 800x600 images in an
 ideal stereo configuration. The frame rate is throttled to 5Hz to reduce CPU load in ORB_SLAM2, but
 it can easily go higher.
+
+## Changes made to this package by fqbueno and jvperez
+Added two new missions for line-following at /scripts. One implements a regular PID Controller [mission_run_pid.py](scripts/mission_run_pid.py),
+and the other utilizes a Fuzzy PID Controller [mission_run_fuzzypid.py](scripts/mission_run_fuzzypid.py.
+
