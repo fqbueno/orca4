@@ -78,5 +78,5 @@ it can easily go higher.
 
 ## Changes made to this package by fqbueno and jvperez
 Added two new missions for line-following at /scripts. One implements a regular PID Controller [mission_run_pid.py](scripts/mission_run_pid.py),
-and the other utilizes a Fuzzy PID Controller [mission_run_fuzzypid.py](scripts/mission_run_fuzzypid.py.
+and the other utilizes a Fuzzy PID Controller [mission_run_fuzzypid.py](scripts/mission_run_fuzzypid.py).
 
